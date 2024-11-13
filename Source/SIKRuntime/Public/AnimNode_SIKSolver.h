@@ -1,56 +1,56 @@
-// 2020 Sticky Snout Studio (Jonas Molgaard)
+// 2025 John Warren
 
 #pragma once
 
 #include "CoreMinimal.h"
 #include "BoneControllers/AnimNode_SkeletalControlBase.h"
-#include "UBIK.h"
-#include "AnimNode_UBIKSolver.generated.h"
+#include "SIK.h"
+#include "AnimNode_SIKSolver.generated.h"
 
 /**
- * UBIK Solver
+ * SIK Solver
  */
 USTRUCT(BlueprintInternalUseOnly)
-struct UBIKRUNTIME_API FAnimNode_UBIKSolver : public FAnimNode_SkeletalControlBase
+struct SIKRUNTIME_API FAnimNode_SIKSolver : public FAnimNode_SkeletalControlBase
 {
     GENERATED_BODY()
 public:
-    FAnimNode_UBIKSolver();
+    FAnimNode_SIKSolver();
 
     /** Feed in the HMD transform in WorldSpace. */
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = UBIK, meta = (PinShownByDefault))
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = SIK, meta = (PinShownByDefault))
     FTransform InHeadTransformWorld;
 
     /** Feed in the Left MotionController in WorldSpace. */
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = UBIK, meta = (PinShownByDefault))
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = SIK, meta = (PinShownByDefault))
     FTransform InLeftHandTransformWorld;
 
     /** Feed in the Right MotionController in WorldSpace. */
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = UBIK, meta = (PinShownByDefault))
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = SIK, meta = (PinShownByDefault))
     FTransform InRightHandTransformWorld;
 
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = UBIK, meta = (PinShownByDefault))
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = SIK, meta = (PinShownByDefault))
     bool bApplyHeadTransform;
 
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = UBIK, meta = (PinShownByDefault))
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = SIK, meta = (PinShownByDefault))
     bool bApplyRightHandTransform;
 
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = UBIK, meta = (PinShownByDefault))
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = SIK, meta = (PinShownByDefault))
     bool bApplyLeftHandTransform;
 
     /** By default Pelvis will be driven from Head location with an offset. Set to true to ignore Location. */
-    UPROPERTY(EditAnywhere, Category = UBIK)
+    UPROPERTY(EditAnywhere, Category = SIK)
     bool bIgnorePelvisLocation;
 
-    UPROPERTY(EditAnywhere, Category = UBIK, meta = (InlineEditConditionToggle))
+    UPROPERTY(EditAnywhere, Category = SIK, meta = (InlineEditConditionToggle))
     bool bApplyBoneAxis;
 
-    UPROPERTY(EditAnywhere, Category = UBIK, meta = (EditCondition="bApplyBoneAxis"))
+    UPROPERTY(EditAnywhere, Category = SIK, meta = (EditCondition="bApplyBoneAxis"))
     TEnumAsByte<EBoneAxis> BoneAxis;
 
-    /** These settings will be returned by calling the GetUBIKSettings function. */
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = UBIK, meta = (PinShownByDefault))
-    FUBIKSettings Settings;
+    /** These settings will be returned by calling the GetSIKSettings function. */
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = SIK, meta = (PinShownByDefault))
+    FSIKSettings Settings;
 
     //** Head bone to modify */
     UPROPERTY(EditAnywhere, Category = Bones)

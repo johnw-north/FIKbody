@@ -1,98 +1,98 @@
-// 2020 Sticky Snout Studio (Jonas Molgaard)
+// 2025 John Warren
 
 #pragma once
 
 #include "Kismet/KismetMathLibrary.h"
-#include "UBIK.generated.h"
+#include "SIK.generated.h"
 
 USTRUCT(BlueprintType)
-struct UBIKRUNTIME_API FUBIKSettings
+struct SIKRUNTIME_API FSIKSettings
 {
     GENERATED_USTRUCT_BODY()
 
 public:
-    /** This should be set via call to GetUBIKSettings, typically from "Event Blueprint Begin Play" **/
+    /** This should be set via call to GetSIKSettings, typically from "Event Blueprint Begin Play" **/
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Settings)
     float DistinctShoulderRotationMultiplier = 0.f;
 
-    /** This should be set via call to GetUBIKSettings, typically from "Event Blueprint Begin Play" **/
+    /** This should be set via call to GetSIKSettings, typically from "Event Blueprint Begin Play" **/
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Settings)
     float DistinctShoulderRotationLimit = 0.f;
 
-    /** This should be set via call to GetUBIKSettings, typically from "Event Blueprint Begin Play" **/
+    /** This should be set via call to GetSIKSettings, typically from "Event Blueprint Begin Play" **/
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Settings)
     float ClavicleOffset = 0.f;
 
-    /** This should be set via call to GetUBIKSettings, typically from "Event Blueprint Begin Play" **/
+    /** This should be set via call to GetSIKSettings, typically from "Event Blueprint Begin Play" **/
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Settings)
     float ElbowBaseOffsetAngle = 0.f;
 
-    /** This should be set via call to GetUBIKSettings, typically from "Event Blueprint Begin Play" **/
+    /** This should be set via call to GetSIKSettings, typically from "Event Blueprint Begin Play" **/
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Settings)
     float ElbowYDistanceStart = 0.f;
 
-    /** This should be set via call to GetUBIKSettings, typically from "Event Blueprint Begin Play" **/
+    /** This should be set via call to GetSIKSettings, typically from "Event Blueprint Begin Play" **/
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Settings)
     float ElbowYWeight = 0.f;
 
-    /** This should be set via call to GetUBIKSettings, typically from "Event Blueprint Begin Play" **/
+    /** This should be set via call to GetSIKSettings, typically from "Event Blueprint Begin Play" **/
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Settings)
     float ElbowHandsRotSpeed = 0.f;
 
-    /** This should be set via call to GetUBIKSettings, typically from "Event Blueprint Begin Play" **/
+    /** This should be set via call to GetSIKSettings, typically from "Event Blueprint Begin Play" **/
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Settings)
     float ElbowRotFromHandRotAlpha = 0.f;
 
-    /** This should be set via call to GetUBIKSettings, typically from "Event Blueprint Begin Play" **/
+    /** This should be set via call to GetSIKSettings, typically from "Event Blueprint Begin Play" **/
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Settings)
     float HeadHandAngleLimit = 0.f;
 
-    /** This should be set via call to GetUBIKSettings, typically from "Event Blueprint Begin Play" **/
+    /** This should be set via call to GetSIKSettings, typically from "Event Blueprint Begin Play" **/
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Settings)
     float OkSpanAngle = 0.f;
 
-    /** This should be set via call to GetUBIKSettings, typically from "Event Blueprint Begin Play" **/
+    /** This should be set via call to GetSIKSettings, typically from "Event Blueprint Begin Play" **/
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Settings)
     FVector BaseCharOffset = FVector(0.f, 0.f, 0.f);
 
-    /** This should be set via call to GetUBIKSettings, typically from "Event Blueprint Begin Play" **/
+    /** This should be set via call to GetSIKSettings, typically from "Event Blueprint Begin Play" **/
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Settings)
     float BodyInterSpeed = 0.f;
 
-    /** This will be set via call to GetUBIKSettings, typically from "Event Blueprint Begin Play" **/
+    /** This will be set via call to GetSIKSettings, typically from "Event Blueprint Begin Play" **/
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Settings, meta = (ToolTip = ""))
     float HeadHandAngleLimitDot = 0.f;
 
-    /** This should be set via call to GetUBIKSettings, typically from "Event Blueprint Begin Play" **/
+    /** This should be set via call to GetSIKSettings, typically from "Event Blueprint Begin Play" **/
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Settings)
     float ArmLength = 0.f;
 
-    /** This will be set via call to GetUBIKSettings, typically from "Event Blueprint Begin Play" **/
+    /** This will be set via call to GetSIKSettings, typically from "Event Blueprint Begin Play" **/
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Settings)
     float UpperArmLength = 0.f;
 
-    /** This will be set via call to GetUBIKSettings, typically from "Event Blueprint Begin Play" **/
+    /** This will be set via call to GetSIKSettings, typically from "Event Blueprint Begin Play" **/
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Settings)
     float LowerArmLength = 0.f;
 
-    /** This should be set via call to GetUBIKSettings, typically from "Event Blueprint Begin Play" **/
+    /** This should be set via call to GetSIKSettings, typically from "Event Blueprint Begin Play" **/
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Settings)
     float UpperArmsDistance = 0.f;
 
-    /** This should be set via call to GetUBIKSettings, typically from "Event Blueprint Begin Play" **/
+    /** This should be set via call to GetSIKSettings, typically from "Event Blueprint Begin Play" **/
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Settings)
     FVector LocalHandOffset = FVector::ZeroVector;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Settings)
     FRotator LocalHandRotationOffset = FRotator::ZeroRotator;
     
-    /** This should be set via call to GetUBIKSettings, typically from "Event Blueprint Begin Play" **/
+    /** This should be set via call to GetSIKSettings, typically from "Event Blueprint Begin Play" **/
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Settings)
     float ShoulderHeadHandAlpha = 0.f;
 };
 
 USTRUCT(BlueprintType)
-struct UBIKRUNTIME_API FUBIKDefaults
+struct SIKRUNTIME_API FSIKDefaults
 {
     GENERATED_USTRUCT_BODY()
 
@@ -165,7 +165,7 @@ public:
 };
 
 USTRUCT(BlueprintType)
-struct UBIKRUNTIME_API FUBIKCalibrationData
+struct SIKRUNTIME_API FSIKCalibrationData
 {
     GENERATED_USTRUCT_BODY()
 
@@ -180,40 +180,40 @@ public:
 };
 
 /**
- * UBIK Initializer class
+ * SIK Initializer class
  */
 UCLASS()
-class UBIKRUNTIME_API UUBIK : public UObject
+class SIKRUNTIME_API USIK : public UObject
 {
     GENERATED_BODY()
 
 public:
 
-    /** Call this to get the UBIKSettings struct, that is needed on the AnimGraph node. **/
-    UFUNCTION(BlueprintCallable, meta = (DisplayName = "GetUBIKSettings", Keywords = "UBIK Calibrate"), Category = "UBIK")
-    static FUBIKSettings Initialize(FUBIKDefaults Defaults, FUBIKCalibrationData Calibration);
+    /** Call this to get the SIKSettings struct, that is needed on the AnimGraph node. **/
+    UFUNCTION(BlueprintCallable, meta = (DisplayName = "GetSIKSettings", Keywords = "SIK Calibrate"), Category = "SIK")
+    static FSIKSettings Initialize(FSIKDefaults Defaults, FSIKCalibrationData Calibration);
 
     /** Adds Offset to Transform in LocalSpace. **/
     static FTransform AddLocalOffset(const FTransform Transform, const FVector Offset);
 
     /** Rotates the Point around Pivot, by given Delta rotation. **/
-    UFUNCTION(BlueprintPure, meta = (DisplayName = "RotatePointAroundPivot", Keywords = "UBIK Rotate Pivot"), Category = "UBIK Utility")
+    UFUNCTION(BlueprintPure, meta = (DisplayName = "RotatePointAroundPivot", Keywords = "SIK Rotate Pivot"), Category = "SIK Utility")
     static FTransform RotatePointAroundPivot(FTransform Point, FTransform Pivot, FRotator Delta);
 
     /** Angle snapping mitigation function.
     * Supply last angle, current angle and what threshold not to pass.
     * If outside that limit, it will keep the last angle, otherwise the current. **/
-    UFUNCTION(BlueprintPure, meta = (DisplayName = "SafeguardAngle", Keywords = "UBIK Safeguard Angle"), Category = "UBIK Utility")
+    UFUNCTION(BlueprintPure, meta = (DisplayName = "SafeguardAngle", Keywords = "SIK Safeguard Angle"), Category = "SIK Utility")
     static float SafeguardAngle(float Last, float Current, float Threshold);
 
     /** Given lengths of the different sides in a triangle,
     * the angle between Adjacent1 and Adjacent2 are returned. **/
-    UFUNCTION(BlueprintPure, meta = (DisplayName = "CosineRule", Keywords = "UBIK Cosine"), Category = "UBIK Utility")
+    UFUNCTION(BlueprintPure, meta = (DisplayName = "CosineRule", Keywords = "SIK Cosine"), Category = "SIK Utility")
     static float CosineRule(float Adjacent1, float Adjacent2, float Opposite);
 
     /** Exposes FQuat helper function FindBetweenNormals, which has will only have a singularity when the two vectors are pointing directly opposite.
     * Note: This may be preferable to using the standard FindLookatRotation, which has singularities directly Up and Down.
     **/
-    UFUNCTION(BlueprintPure, meta = (DisplayName = "FindBetweenNormals", Keywords = "UBIK Cosine"), Category = "UBIK Utility")
+    UFUNCTION(BlueprintPure, meta = (DisplayName = "FindBetweenNormals", Keywords = "SIK Cosine"), Category = "SIK Utility")
     static FRotator FindBetweenNormals(const FVector& A, const FVector& B);
 };

@@ -1,17 +1,17 @@
-// 2020 Sticky Snout Studio (Jonas Mølgaard)
+// 2025 John Warren
 
-#include "UBIKEditor.h"
+#include "SIKEditor.h"
 
-DEFINE_LOG_CATEGORY(LogUBIKEditor);
+DEFINE_LOG_CATEGORY(LogSIKEditor);
 
-#define LOCTEXT_NAMESPACE "UBIKEditor"
+#define LOCTEXT_NAMESPACE "SIKEditor"
 
-void FUBIKEditor::StartupModule()
+void FSIKEditor::StartupModule()
 {
 	// This code will execute after your module is loaded into memory; the exact timing is specified in the .uplugin file per-module
 }
 
-void FUBIKEditor::ShutdownModule()
+void FSIKEditor::ShutdownModule()
 {
 	// This function may be called during shutdown to clean up your module.  For modules that support dynamic reloading,
 	// we call this function before unloading the module.
@@ -19,4 +19,4 @@ void FUBIKEditor::ShutdownModule()
 
 #undef LOCTEXT_NAMESPACE
 	
-IMPLEMENT_MODULE(FUBIKEditor, UBIKEditor)
+IMPLEMENT_MODULE(FSIKEditor, SIKEditor)

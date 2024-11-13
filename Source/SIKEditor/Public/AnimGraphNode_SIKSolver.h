@@ -1,24 +1,24 @@
-// 2020 Sticky Snout Studio (Jonas Molgaard)
+// 2025 John Warren
 
 #pragma once
 
 #include "AnimGraphNode_SkeletalControlBase.h"
 //#include "AnimGraphNode_Base.h"
-#include "AnimNode_UBIKSolver.h"
-#include "AnimGraphNode_UBIKSolver.generated.h"
+#include "AnimNode_SIKSolver.h"
+#include "AnimGraphNode_SIKSolver.generated.h"
 
 /**
  * Class that expose the actual node to the AnimGraph. 
  * Here we have stuff like the title, color of node, tooltips etc.
  */
-UCLASS(meta = (Keywords = "UBIK Inverse Kinematics Solve IK Upper Body"))
-class UBIKEDITOR_API UAnimGraphNode_UBIKSolver : public UAnimGraphNode_SkeletalControlBase
-//class UBIKEDITOR_API UAnimGraphNode_UBIKSolver : public UAnimGraphNode_Base
+UCLASS(meta = (Keywords = "SIK Simple Inverse Kinematics Solve IK Full VR Body"))
+class SIKEDITOR_API UAnimGraphNode_SIKSolver : public UAnimGraphNode_SkeletalControlBase
+//class SIKEDITOR_API UAnimGraphNode_SIKSolver : public UAnimGraphNode_Base
 {
 	GENERATED_BODY()
 
 	UPROPERTY(EditAnywhere, Category = Settings)
-	FAnimNode_UBIKSolver Node;
+	FAnimNode_SIKSolver Node;
 	
 public:
 	// UEdGraphNode interface

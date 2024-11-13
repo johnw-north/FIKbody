@@ -1,14 +1,14 @@
-// 2020 Sticky Snout Studio (Jonas Molgaard)
+// 2025 John Warren
 
-#include "UBIK.h"
+#include "SIK.h"
 
-#include "UBIKRuntime.h"
+#include "SIKRuntime.h"
 
-FUBIKSettings UUBIK::Initialize(FUBIKDefaults Defaults, FUBIKCalibrationData Calibration)
+FSIKSettings USIK::Initialize(FSIKDefaults Defaults, FSIKCalibrationData Calibration)
 {
 	const float LowerArmRatio = 0.48f;
 
-	FUBIKSettings Settings;
+	FSIKSettings Settings;
 
 	Settings.ArmLength = (Calibration.Height / 2.0f) - Calibration.UpperArmsDistance;
 	Settings.LowerArmLength = Settings.ArmLength * LowerArmRatio;
@@ -34,26 +34,26 @@ FUBIKSettings UUBIK::Initialize(FUBIKDefaults Defaults, FUBIKCalibrationData Cal
 	return Settings;
 }
 
-FTransform UUBIK::AddLocalOffset(const FTransform Transform, const FVector Offset)
+FTransform USIK::AddLocalOffset(const FTransform Transform, const FVector Offset)
 {
 	FTransform Inversed = Transform.Inverse();
 	Inversed.AddToTranslation(Offset);
 	return Inversed.Inverse();
 }
 
-FTransform UUBIK::RotatePointAroundPivot(FTransform Point, FTransform Pivot, FRotator Delta)
+FTransform USIK::RotatePointAroundPivot(FTransform Point, FTransform Pivot, FRotator Delta)
 {
 	FTransform PointInPivotSpace = Point * Pivot.Inverse();
 	FTransform RotatedInPivotSpace = PointInPivotSpace * FTransform(Delta, FVector::ZeroVector, FVector::OneVector);
 	return RotatedInPivotSpace * Pivot;
 }
 
-float UUBIK::SafeguardAngle(float Last, float Current, float Threshold)
+float USIK::SafeguardAngle(float Last, float Current, float Threshold)
 {
 	return (FMath::Abs(Last - Current) > Threshold) ? (Last) : (Current);
 }
 
-float UUBIK::CosineRule(float Adjacent1, float Adjacent2, float Opposite)
+float USIK::CosineRule(float Adjacent1, float Adjacent2, float Opposite)
 {
 	return FMath::RadiansToDegrees(
 		FMath::Acos(
@@ -63,7 +63,7 @@ float UUBIK::CosineRule(float Adjacent1, float Adjacent2, float Opposite)
 	);
 }
 
-FRotator UUBIK::FindBetweenNormals(const FVector& A, const FVector& B)
+FRotator USIK::FindBetweenNormals(const FVector& A, const FVector& B)
 {
 	return FQuat::FindBetweenNormals(A, B).Rotator();
 }

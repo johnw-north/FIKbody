@@ -1,13 +1,13 @@
-// 2020 Sticky Snout Studio (Jonas Molgaard)
+// 2025 John Warren
 
 #pragma once
 
 #include "CoreMinimal.h"
 #include "Modules/ModuleManager.h"
 
-DECLARE_LOG_CATEGORY_EXTERN(LogUBIKEditor, Log, All);
+DECLARE_LOG_CATEGORY_EXTERN(LogSIKRuntime, Log, All);
 
-class FUBIKEditor : public IModuleInterface
+class FSIKRuntime : public IModuleInterface
 {
 public:
 

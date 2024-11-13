@@ -2,9 +2,9 @@
 
 using UnrealBuildTool;
 
-public class UBIKEditor : ModuleRules
+public class SIKRuntime : ModuleRules
 {
-	public UBIKEditor(ReadOnlyTargetRules Target) : base(Target)
+	public SIKRuntime(ReadOnlyTargetRules Target) : base(Target)
 	{
 		PCHUsage = ModuleRules.PCHUsageMode.UseExplicitOrSharedPCHs;
 		
@@ -21,11 +21,12 @@ public class UBIKEditor : ModuleRules
 			}
 			);
 
-        PublicDependencyModuleNames.AddRange(new string[] { "UBIKRuntime", "Core", "CoreUObject", "Engine", "InputCore"});
 
-        PrivateDependencyModuleNames.AddRange(new string[] { "UnrealEd", "EditorStyle", "AnimGraph", "AnimGraphRuntime", "BlueprintGraph", "PropertyEditor", "Slate", "SlateCore" });
-		
-		DynamicallyLoadedModuleNames.AddRange(
+        PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "AnimGraphRuntime", "AnimationCore" });
+
+        PrivateDependencyModuleNames.AddRange(new string[] { "Slate", "SlateCore", "Projects", "XRBase", "HeadMountedDisplay" });
+
+        DynamicallyLoadedModuleNames.AddRange(
 			new string[]
 			{
 				// ... add any modules that your module loads dynamically here ...

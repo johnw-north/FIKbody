@@ -1,17 +1,17 @@
-// 2020 Sticky Snout Studio (Jonas Molgaard)
+// 2025 John Warren
 
-#include "AnimNode_UBIKSolver.h"
+#include "AnimNode_SIKSolver.h"
 #include "AnimationRuntime.h"
 #include "HeadMountedDisplayFunctionLibrary.h"
-#include "UBIKRuntime.h"
+#include "SIKRuntime.h"
 #include "Animation/AnimInstanceProxy.h"
 #include "Interfaces/IPluginManager.h"
 #include "Misc/EngineVersionComparison.h"
 
 /** STATS FOR USE WITH PROFILER **/
-DECLARE_CYCLE_STAT(TEXT("UBIK_EvaluateThread"), STAT_UBIK_EvaluateThread, STATGROUP_Character);
+DECLARE_CYCLE_STAT(TEXT("SIK_EvaluateThread"), STAT_SIK_EvaluateThread, STATGROUP_Character);
 
-FAnimNode_UBIKSolver::FAnimNode_UBIKSolver(): Super(),
+FAnimNode_SIKSolver::FAnimNode_SIKSolver(): Super(),
                                               bApplyHeadTransform(true),
                                               bApplyRightHandTransform(true),
                                               bApplyLeftHandTransform(true),
@@ -24,19 +24,19 @@ FAnimNode_UBIKSolver::FAnimNode_UBIKSolver(): Super(),
 {
 }
 
-void FAnimNode_UBIKSolver::GatherDebugData(FNodeDebugData& DebugData)
+void FAnimNode_SIKSolver::GatherDebugData(FNodeDebugData& DebugData)
 {
     Super::GatherDebugData(DebugData);
 }
 
-void FAnimNode_UBIKSolver::Initialize_AnyThread(const FAnimationInitializeContext& Context)
+void FAnimNode_SIKSolver::Initialize_AnyThread(const FAnimationInitializeContext& Context)
 {
     Super::Initialize_AnyThread(Context);
 
     const TSharedPtr<IPlugin> OculusXRPlugin = IPluginManager::Get().FindPlugin("OculusXR");
     const FName HMDName = UHeadMountedDisplayFunctionLibrary::GetHMDDeviceName();
     const bool pluginEnabled = OculusXRPlugin.IsValid() && OculusXRPlugin->IsEnabled();
-    UE_LOG(LogUBIKRuntime, Display, TEXT("HMDName: %s, MetaXR: %d, Enabled: %d"), *HMDName.ToString(), OculusXRPlugin.IsValid(), pluginEnabled);
+    UE_LOG(LogSIKRuntime, Display, TEXT("HMDName: %s, MetaXR: %d, Enabled: %d"), *HMDName.ToString(), OculusXRPlugin.IsValid(), pluginEnabled);
 
     if (!OculusXRPlugin.IsValid()
         || (!OculusXRPlugin->IsEnabled() && (HMDName.ToString().Contains("Quest")
@@ -49,9 +49,9 @@ void FAnimNode_UBIKSolver::Initialize_AnyThread(const FAnimationInitializeContex
     Context.AnimInstanceProxy->GetSkelMeshComponent()->SetTickGroup(TG_DuringPhysics);
 }
 
-void FAnimNode_UBIKSolver::EvaluateSkeletalControl_AnyThread(FComponentSpacePoseContext& Output, TArray<FBoneTransform>& OutBoneTransforms)
+void FAnimNode_SIKSolver::EvaluateSkeletalControl_AnyThread(FComponentSpacePoseContext& Output, TArray<FBoneTransform>& OutBoneTransforms)
 {
-    SCOPE_CYCLE_COUNTER(STAT_UBIK_EvaluateThread);
+    SCOPE_CYCLE_COUNTER(STAT_SIK_EvaluateThread);
     Super::EvaluateSkeletalControl_AnyThread(Output, OutBoneTransforms);
 
     if (Output.AnimInstanceProxy->GetSkelMeshComponent() && Output.AnimInstanceProxy->GetSkelMeshComponent()->GetWorld())
@@ -66,7 +66,7 @@ void FAnimNode_UBIKSolver::EvaluateSkeletalControl_AnyThread(FComponentSpacePose
 
     // check(OutBoneTransforms.Num() == 0);
 
-    //UE_LOG(LogUBIKRuntime, Display, TEXT("DeltaTime: %f"), DeltaTime);
+    //UE_LOG(LogSIKRuntime, Display, TEXT("DeltaTime: %f"), DeltaTime);
     SkeletalMeshComponent = Output.AnimInstanceProxy->GetSkelMeshComponent();
     ComponentSpaceWorld = Output.AnimInstanceProxy->GetComponentTransform();
     ComponentSpace = ComponentSpaceWorld.Inverse();
@@ -162,7 +162,7 @@ void FAnimNode_UBIKSolver::EvaluateSkeletalControl_AnyThread(FComponentSpacePose
 }
 
 
-void FAnimNode_UBIKSolver::SetBoneTransform(TArray<FBoneTransform>& OutBoneTransforms, const FBoneReference& BoneToModify,
+void FAnimNode_SIKSolver::SetBoneTransform(TArray<FBoneTransform>& OutBoneTransforms, const FBoneReference& BoneToModify,
                                             const FTransform& InTransform, FComponentSpacePoseContext& Output,
                                             const FBoneContainer& BoneContainer,
                                             const bool bApplyRotation,
@@ -206,7 +206,7 @@ void FAnimNode_UBIKSolver::SetBoneTransform(TArray<FBoneTransform>& OutBoneTrans
     }
 }
 
-FVector FAnimNode_UBIKSolver::GetAxisVector(const EBoneAxis Axis) const
+FVector FAnimNode_SIKSolver::GetAxisVector(const EBoneAxis Axis) const
 {
     switch (Axis)
     {
@@ -220,7 +220,7 @@ FVector FAnimNode_UBIKSolver::GetAxisVector(const EBoneAxis Axis) const
     }
 }
 
-bool FAnimNode_UBIKSolver::IsValidToEvaluate(const USkeleton* Skeleton, const FBoneContainer& RequiredBones)
+bool FAnimNode_SIKSolver::IsValidToEvaluate(const USkeleton* Skeleton, const FBoneContainer& RequiredBones)
 {
     for (const FBoneReference& Bone : AllBones)
     {
@@ -233,14 +233,14 @@ bool FAnimNode_UBIKSolver::IsValidToEvaluate(const USkeleton* Skeleton, const FB
     return true;
 }
 
-void FAnimNode_UBIKSolver::UpdateInternal(const FAnimationUpdateContext& Context)
+void FAnimNode_SIKSolver::UpdateInternal(const FAnimationUpdateContext& Context)
 {
     Super::UpdateInternal(Context);
 
     CachedDeltaTime = Context.GetDeltaTime();
 }
 
-void FAnimNode_UBIKSolver::InitializeBoneReferences(const FBoneContainer& RequiredBones)
+void FAnimNode_SIKSolver::InitializeBoneReferences(const FBoneContainer& RequiredBones)
 {
     Super::InitializeBoneReferences(RequiredBones);
 
@@ -290,23 +290,23 @@ void FAnimNode_UBIKSolver::InitializeBoneReferences(const FBoneContainer& Requir
 * ShoulderTransformW, ShoulderTransform, LeftTransformW, RightTransformW, 
 * HeadTransformC, LeftTransformC, RightTransformC
 **/
-void FAnimNode_UBIKSolver::ConvertTransforms()
+void FAnimNode_SIKSolver::ConvertTransforms()
 {
     // Technically ShoulderTransformC should be set 1st
     ShoulderTransformWorld = ShoulderTransformComponentSpace * ComponentSpaceWorld;
     ShoulderTransform = ShoulderTransformWorld.Inverse();
 
-    //UE_LOG(LogUBIKRuntime, Display, TEXT("1:LeftHandTransformW: %s"), *LeftHandTransformW.GetTranslation().ToString());
-    //UE_LOG(LogUBIKRuntime, Display, TEXT("Settings.LocalHandOffset: %s"), *Settings.LocalHandOffset.GetTranslation().ToString());
-    LeftHandTransformWorld = UUBIK::AddLocalOffset(InLeftHandTransformWorld, Settings.LocalHandOffset);
+    //UE_LOG(LogSIKRuntime, Display, TEXT("1:LeftHandTransformW: %s"), *LeftHandTransformW.GetTranslation().ToString());
+    //UE_LOG(LogSIKRuntime, Display, TEXT("Settings.LocalHandOffset: %s"), *Settings.LocalHandOffset.GetTranslation().ToString());
+    LeftHandTransformWorld = USIK::AddLocalOffset(InLeftHandTransformWorld, Settings.LocalHandOffset);
     LeftHandTransformWorld.SetRotation(LeftHandTransformWorld.Rotator().Add(Settings.LocalHandRotationOffset.Pitch,
                                                                             Settings.LocalHandRotationOffset.Yaw,
                                                                             Settings.LocalHandRotationOffset.Roll).Quaternion());
     //DebugDrawAxes(LeftHandTransformW, true);
 
-    //UE_LOG(LogUBIKRuntime, Display, TEXT("2:LeftHandTransformW: %s"), *LeftHandTransformW.GetTranslation().ToString());
+    //UE_LOG(LogSIKRuntime, Display, TEXT("2:LeftHandTransformW: %s"), *LeftHandTransformW.GetTranslation().ToString());
     // Mirror Y-direction otherwise it will move opposite ways.
-    RightHandTransformWorld = UUBIK::AddLocalOffset(InRightHandTransformWorld, Settings.LocalHandOffset * FVector(1.f, -1.f, 1.f));
+    RightHandTransformWorld = USIK::AddLocalOffset(InRightHandTransformWorld, Settings.LocalHandOffset * FVector(1.f, -1.f, 1.f));
     RightHandTransformWorld.SetRotation(RightHandTransformWorld.Rotator().Add(Settings.LocalHandRotationOffset.Pitch,
                                                                               Settings.LocalHandRotationOffset.Yaw,
                                                                               Settings.LocalHandRotationOffset.Roll).Quaternion());
@@ -320,23 +320,23 @@ void FAnimNode_UBIKSolver::ConvertTransforms()
 /** SideEffects: Updates the following MemberVariables:
 * ShoulderTransformW, HeadTransformS, LeftTransformS, RightTransformS
 **/
-void FAnimNode_UBIKSolver::SetShoulder()
+void FAnimNode_SIKSolver::SetShoulder()
 {
     FRotator RotationFromHead = GetShoulderRotationFromHead();
-    //UE_LOG(LogUBIKRuntime, Display, TEXT("RotationFromHead: %s"), *RotationFromHead.ToString());
+    //UE_LOG(LogSIKRuntime, Display, TEXT("RotationFromHead: %s"), *RotationFromHead.ToString());
 
     FRotator RotationFromHands = GetShoulderRotationFromHands();
-    //UE_LOG(LogUBIKRuntime, Display, TEXT("RotationFromHands: %s"), *RotationFromHands.ToString());
+    //UE_LOG(LogSIKRuntime, Display, TEXT("RotationFromHands: %s"), *RotationFromHands.ToString());
 
     FRotator Rotation = FRotator(
         0.f, UKismetMathLibrary::RLerp(RotationFromHead, RotationFromHands, Settings.ShoulderHeadHandAlpha, true).Yaw, 0.f);
-    //UE_LOG(LogUBIKRuntime, Display, TEXT("Rotation: %s"), *Rotation.ToString());
+    //UE_LOG(LogSIKRuntime, Display, TEXT("Rotation: %s"), *Rotation.ToString());
 
     FVector Translation = GetShoulderLocation();
-    //UE_LOG(LogUBIKRuntime, Display, TEXT("GetShoulderLocation: %s"), *Translation.ToString());
+    //UE_LOG(LogSIKRuntime, Display, TEXT("GetShoulderLocation: %s"), *Translation.ToString());
 
     ShoulderTransformComponentSpace = FTransform(Rotation, Translation, FVector::OneVector);
-    //UE_LOG(LogUBIKRuntime, Display, TEXT("ShoulderTransformC: %s"), *ShoulderTransformC.Rotator().ToString());
+    //UE_LOG(LogSIKRuntime, Display, TEXT("ShoulderTransformC: %s"), *ShoulderTransformC.Rotator().ToString());
 
     ShoulderTransformWorld = ShoulderTransformComponentSpace * ComponentSpaceWorld;
     HeadTransformS = InHeadTransformWorld * ShoulderTransform;
@@ -344,7 +344,7 @@ void FAnimNode_UBIKSolver::SetShoulder()
     RightHandTransformS = RightHandTransformWorld * ShoulderTransform;
 }
 
-FVector FAnimNode_UBIKSolver::GetShoulderLocation()
+FVector FAnimNode_SIKSolver::GetShoulderLocation()
 {
     FVector Offset = FVector(-9.f, 0.f, -7.f) + FVector(Settings.BaseCharOffset.X, Settings.BaseCharOffset.Y, 0.f);
     FRotator HeadRotator = HeadTransformComponentSpace.Rotator();
@@ -357,33 +357,33 @@ FVector FAnimNode_UBIKSolver::GetShoulderLocation()
     FVector ShoulderTranslation = HeadTransformComponentSpace.GetTranslation() + Offset;
     FTransform TempShoulder = FTransform(FRotator::ZeroRotator, ShoulderTranslation, FVector::OneVector);
 
-    FTransform TempRotatedShoulder = UUBIK::RotatePointAroundPivot(TempShoulder, HeadTransformComponentSpace, Delta);
+    FTransform TempRotatedShoulder = USIK::RotatePointAroundPivot(TempShoulder, HeadTransformComponentSpace, Delta);
 
     return TempRotatedShoulder.GetTranslation() + FVector(0.f, 0.f, -17.f);
 }
 
-FRotator FAnimNode_UBIKSolver::GetShoulderRotationFromHead()
+FRotator FAnimNode_SIKSolver::GetShoulderRotationFromHead()
 {
     return FRotator(0.f, HeadTransformComponentSpace.Rotator().Yaw, 0.f);
 }
 
-FRotator FAnimNode_UBIKSolver::GetShoulderRotationFromHands()
+FRotator FAnimNode_SIKSolver::GetShoulderRotationFromHands()
 {
     FVector Offset = FVector(0.f, 0.f, 15.f);
     FVector TopHeadTranslation = InHeadTransformWorld.GetTranslation() + InHeadTransformWorld.Rotator().RotateVector(Offset);
 
     FVector Hand = (LeftHandTransformWorld * InHeadTransformWorld.Inverse()).GetTranslation();
     FVector HandHeadDelta = LeftHandTransformWorld.GetTranslation() - TopHeadTranslation;
-    //UE_LOG(LogUBIKRuntime, Display, TEXT("LEFTHAND: LeftTransformW: %s LastAngle: %f Hand: %s HandHeadDelta: %s"), *LeftHandTransformW.ToString(), LeftHeadHandAngle, *Hand.ToString(), *HandHeadDelta.ToString());
+    //UE_LOG(LogSIKRuntime, Display, TEXT("LEFTHAND: LeftTransformW: %s LastAngle: %f Hand: %s HandHeadDelta: %s"), *LeftHandTransformW.ToString(), LeftHeadHandAngle, *Hand.ToString(), *HandHeadDelta.ToString());
 
     LeftHeadHandAngle = GetHeadHandAngle(LeftHeadHandAngle, Hand, HandHeadDelta);
-    //UE_LOG(LogUBIKRuntime, Display, TEXT("LeftHeadHandAngle: %f"), LeftHeadHandAngle);
+    //UE_LOG(LogSIKRuntime, Display, TEXT("LeftHeadHandAngle: %f"), LeftHeadHandAngle);
 
     Hand = (RightHandTransformWorld * InHeadTransformWorld.Inverse()).GetTranslation();
     HandHeadDelta = RightHandTransformWorld.GetTranslation() - TopHeadTranslation;
-    //UE_LOG(LogUBIKRuntime, Display, TEXT("RIGHTHAND: RightTransformW: %s LastAngle: %f Hand: %s HandHeadDelta: %s"), *RightTransformW.ToString(), RightHeadHandAngle, *Hand.ToString(), *HandHeadDelta.ToString());
+    //UE_LOG(LogSIKRuntime, Display, TEXT("RIGHTHAND: RightTransformW: %s LastAngle: %f Hand: %s HandHeadDelta: %s"), *RightTransformW.ToString(), RightHeadHandAngle, *Hand.ToString(), *HandHeadDelta.ToString());
     RightHeadHandAngle = GetHeadHandAngle(RightHeadHandAngle, Hand, HandHeadDelta);
-    //UE_LOG(LogUBIKRuntime, Display, TEXT("RightHeadHandAngle: %f"), RightHeadHandAngle);
+    //UE_LOG(LogSIKRuntime, Display, TEXT("RightHeadHandAngle: %f"), RightHeadHandAngle);
 
     FRotator YawRotator = FRotator(0.f, ((LeftHeadHandAngle + RightHeadHandAngle) / 2.f), 0.f);
     FTransform TempTransform = FTransform(YawRotator, FVector::ZeroVector, FVector::OneVector);
@@ -396,15 +396,15 @@ FRotator FAnimNode_UBIKSolver::GetShoulderRotationFromHands()
     return TempTransform.Rotator();
 }
 
-float FAnimNode_UBIKSolver::GetHeadHandAngle(float LastAngle, const FVector& Hand, const FVector& HandHeadDelta)
+float FAnimNode_SIKSolver::GetHeadHandAngle(float LastAngle, const FVector& Hand, const FVector& HandHeadDelta)
 {
     float HeadHandAlpha = UKismetMathLibrary::MapRangeClamped(FVector(HandHeadDelta.X, HandHeadDelta.Y, 0.f).Size(), 20.f, 50.f, 0.f, 1.f);
-    //UE_LOG(LogUBIKRuntime, Display, TEXT("HeadHandAlpha: %f"), HeadHandAlpha);
+    //UE_LOG(LogSIKRuntime, Display, TEXT("HeadHandAlpha: %f"), HeadHandAlpha);
 
     FVector Hand2D = FVector(Hand.X, Hand.Y, 0.f);
     FVector Hand2DNormalized = Hand2D.GetSafeNormal();
     float Angle = FMath::RadiansToDegrees(FMath::Atan2(Hand2DNormalized.Y, Hand2DNormalized.X));
-    //UE_LOG(LogUBIKRuntime, Display, TEXT("Angle: %f"), Angle);
+    //UE_LOG(LogSIKRuntime, Display, TEXT("Angle: %f"), Angle);
 
     bool Selector1 = FVector::DotProduct(Hand2DNormalized, FVector::ForwardVector) > Settings.HeadHandAngleLimitDot;
     bool Selector2 = (FMath::Sign(LastAngle) == FMath::Sign(Angle)) ||
@@ -412,38 +412,38 @@ float FAnimNode_UBIKSolver::GetHeadHandAngle(float LastAngle, const FVector& Han
     bool Selector = Selector1 && Selector2;
 
     float SelectedFloat = (Selector) ? (Angle) : (Settings.HeadHandAngleLimit * FMath::Sign(LastAngle));
-    //UE_LOG(LogUBIKRuntime, Display, TEXT("SelectedFloat: %f"), SelectedFloat);
+    //UE_LOG(LogSIKRuntime, Display, TEXT("SelectedFloat: %f"), SelectedFloat);
 
     return FMath::Lerp(0.f, SelectedFloat, HeadHandAlpha);
 }
 
-void FAnimNode_UBIKSolver::SetLeftUpperArm()
+void FAnimNode_SIKSolver::SetLeftUpperArm()
 {
     LeftUpperArmTransformS = RotateUpperArm(true, LeftHandTransformS.GetTranslation());
-    //UE_LOG(LogUBIKRuntime, Display, TEXT("LeftUpperArmTransformS %s"), *LeftUpperArmTransformS.ToString());
+    //UE_LOG(LogSIKRuntime, Display, TEXT("LeftUpperArmTransformS %s"), *LeftUpperArmTransformS.ToString());
 
     const FVector& X = (LeftUpperArmTransformS * ShoulderTransformWorld).GetTranslation() - ShoulderTransformWorld.GetTranslation();
     const FVector& Z = FVector::UpVector;
 
     LeftClavicleComponentSpace = FTransform(UKismetMathLibrary::MakeRotFromXZ(X, Z), FVector::ZeroVector, FVector::OneVector) *
         ComponentSpace;
-    //UE_LOG(LogUBIKRuntime, Display, TEXT("LeftClavicleC %s"), *LeftClavicleC.ToString());
+    //UE_LOG(LogSIKRuntime, Display, TEXT("LeftClavicleC %s"), *LeftClavicleC.ToString());
 }
 
-void FAnimNode_UBIKSolver::SetRightUpperArm()
+void FAnimNode_SIKSolver::SetRightUpperArm()
 {
     RightUpperArmTransformS = RotateUpperArm(false, RightHandTransformS.GetTranslation());
-    //UE_LOG(LogUBIKRuntime, Display, TEXT("RightUpperArmTransformS %s"), *RightUpperArmTransformS.ToString());
+    //UE_LOG(LogSIKRuntime, Display, TEXT("RightUpperArmTransformS %s"), *RightUpperArmTransformS.ToString());
 
     const FVector& X = (RightUpperArmTransformS * ShoulderTransformWorld).GetTranslation() - ShoulderTransformWorld.GetTranslation();
     const FVector& Z = FVector::UpVector;
 
     RightClavicleComponentSpace = FTransform(UKismetMathLibrary::MakeRotFromXZ(X, Z), FVector::ZeroVector, FVector::OneVector) *
         ComponentSpace;
-    //UE_LOG(LogUBIKRuntime, Display, TEXT("RightClavicleC %s"), *RightClavicleC.ToString());
+    //UE_LOG(LogSIKRuntime, Display, TEXT("RightClavicleC %s"), *RightClavicleC.ToString());
 }
 
-FTransform FAnimNode_UBIKSolver::RotateUpperArm(bool IsLeftArm, const FVector& HandTranslation)
+FTransform FAnimNode_SIKSolver::RotateUpperArm(bool IsLeftArm, const FVector& HandTranslation)
 {
     const float Sign = (IsLeftArm) ? (1.f) : (-1.f);
 
@@ -478,7 +478,7 @@ FTransform FAnimNode_UBIKSolver::RotateUpperArm(bool IsLeftArm, const FVector& H
 * are used in the coming calculations to ensure they reach right angle.
 * They do that by setting LeftUpperArmTransformS and RightUpperArmTransformS.
 */
-void FAnimNode_UBIKSolver::ResetUpperArmsLocation()
+void FAnimNode_SIKSolver::ResetUpperArmsLocation()
 {
 #if UE_VERSION_OLDER_THAN(5, 3, 0)
     if (SkeletalMeshComponent && SkeletalMeshComponent->SkeletalMesh)
@@ -488,14 +488,14 @@ void FAnimNode_UBIKSolver::ResetUpperArmsLocation()
     {
         const FVector& LeftUpperArm = SkeletalMeshComponent->GetSocketTransform(LeftUpperArmBoneToModify.BoneName, RTS_World).GetTranslation();
         LeftUpperArmTransformS = FTransform(UKismetMathLibrary::InverseTransformLocation(ShoulderTransformWorld, LeftUpperArm));
-        //UE_LOG(LogUBIKRuntime, Display, TEXT("LeftUpperArm %s"), *LeftUpperArm.ToString());
+        //UE_LOG(LogSIKRuntime, Display, TEXT("LeftUpperArm %s"), *LeftUpperArm.ToString());
 
         const FVector& RightUpperArm = SkeletalMeshComponent->GetSocketTransform(RightUpperArmBoneToModify.BoneName, RTS_World).GetTranslation();
         RightUpperArmTransformS = FTransform(UKismetMathLibrary::InverseTransformLocation(ShoulderTransformWorld, RightUpperArm));
     }
 }
 
-void FAnimNode_UBIKSolver::SolveArms()
+void FAnimNode_SIKSolver::SolveArms()
 {
     /** LEFT ARM **/
     FVector HandLoc = LeftHandTransformS.GetTranslation();
@@ -507,27 +507,27 @@ void FAnimNode_UBIKSolver::SolveArms()
     FTransform UpperArm = FTransform::Identity;
     FTransform LowerArm = FTransform::Identity;
 
-    //UE_LOG(LogUBIKRuntime, Display, TEXT("UA: %s H: %s"), *UpperArmLoc.ToString(), *HandLoc.ToString()); 
+    //UE_LOG(LogSIKRuntime, Display, TEXT("UA: %s H: %s"), *UpperArmLoc.ToString(), *HandLoc.ToString()); 
     SetElbowBasePosition(UpperArmLoc, HandLoc, true, UpperArmBase, LowerArmBase);
-    //UE_LOG(LogUBIKRuntime, Display, TEXT("LowerArmBase: %s"), *LowerArmBase.ToString());
+    //UE_LOG(LogSIKRuntime, Display, TEXT("LowerArmBase: %s"), *LowerArmBase.ToString());
 
     float BaseAngle = RotateElbowByHandPosition(HandLoc, true);
-    //UE_LOG(LogUBIKRuntime, Display, TEXT("BaseAngle: %f"), BaseAngle);
+    //UE_LOG(LogSIKRuntime, Display, TEXT("BaseAngle: %f"), BaseAngle);
 
     RotateElbow(BaseAngle, UpperArmBase, LowerArmBase, HandLoc, true, UpperArm, LowerArm);
-    //UE_LOG(LogUBIKRuntime, Display, TEXT("LowerArm: %s"), *LowerArm.ToString());
+    //UE_LOG(LogSIKRuntime, Display, TEXT("LowerArm: %s"), *LowerArm.ToString());
 
     float Angle = RotateElbowByHandRotation(LowerArm, HandRot);
-    //UE_LOG(LogUBIKRuntime, Display, TEXT("Angle: %f"), Angle);
+    //UE_LOG(LogSIKRuntime, Display, TEXT("Angle: %f"), Angle);
 
-    float SafeAngle = UUBIK::SafeguardAngle(LeftElbowHandAngle, Angle, 120.f);
+    float SafeAngle = USIK::SafeguardAngle(LeftElbowHandAngle, Angle, 120.f);
 
     LeftElbowHandAngle = FMath::FInterpTo(LeftElbowHandAngle, SafeAngle, CachedDeltaTime, Settings.ElbowHandsRotSpeed);
-    //UE_LOG(LogUBIKRuntime, Display, TEXT("LeftElbowHandAngle: %f"), LeftElbowHandAngle);
+    //UE_LOG(LogSIKRuntime, Display, TEXT("LeftElbowHandAngle: %f"), LeftElbowHandAngle);
 
     RotateElbow(LeftElbowHandAngle + BaseAngle, UpperArmBase, LowerArmBase, HandLoc, true, LeftUpperArmTransformS, LeftLowerArmTransformS);
-    //UE_LOG(LogUBIKRuntime, Display, TEXT("LeftElbowHandAngle + BaseAngle: %f"), LeftElbowHandAngle + BaseAngle);
-    //UE_LOG(LogUBIKRuntime, Display, TEXT("LUAS: %s LLAS: %s"), *LeftUpperArmTransformS.ToString(), *LeftLowerArmTransformS.ToString());
+    //UE_LOG(LogSIKRuntime, Display, TEXT("LeftElbowHandAngle + BaseAngle: %f"), LeftElbowHandAngle + BaseAngle);
+    //UE_LOG(LogSIKRuntime, Display, TEXT("LUAS: %s LLAS: %s"), *LeftUpperArmTransformS.ToString(), *LeftLowerArmTransformS.ToString());
 
     LeftUpperArmTransformWorld = LeftUpperArmTransformS * ShoulderTransformWorld;
     LeftLowerArmTransformWorld = LeftLowerArmTransformS * ShoulderTransformWorld;
@@ -555,10 +555,10 @@ void FAnimNode_UBIKSolver::SolveArms()
 
     Angle = RotateElbowByHandRotation(LowerArm, HandRot);
 
-    SafeAngle = UUBIK::SafeguardAngle(RightElbowHandAngle, Angle, 120.f);
+    SafeAngle = USIK::SafeguardAngle(RightElbowHandAngle, Angle, 120.f);
 
     RightElbowHandAngle = FMath::FInterpTo(RightElbowHandAngle, SafeAngle, CachedDeltaTime, Settings.ElbowHandsRotSpeed);
-    //UE_LOG(LogUBIKRuntime, Display, TEXT("RightElbowHandAngle: %f"), RightElbowHandAngle);
+    //UE_LOG(LogSIKRuntime, Display, TEXT("RightElbowHandAngle: %f"), RightElbowHandAngle);
 
     RotateElbow(RightElbowHandAngle + BaseAngle, UpperArmBase, LowerArmBase, HandLoc, false, RightUpperArmTransformS,
                 RightLowerArmTransformS);
@@ -573,35 +573,35 @@ void FAnimNode_UBIKSolver::SolveArms()
     RightLowerArmTransformComponentSpace = RightLowerArmTransformWorld * ComponentSpace;
 }
 
-void FAnimNode_UBIKSolver::SetElbowBasePosition(const FVector& UpperArm, const FVector& Hand, bool bIsLeftArm,
+void FAnimNode_SIKSolver::SetElbowBasePosition(const FVector& UpperArm, const FVector& Hand, bool bIsLeftArm,
                                                 FTransform& UpperArmTransform, FTransform& LowerArmTransform)
 {
     const float UpperArmToHandLen = (UpperArm - Hand).Size();
 
     const float Sign = (bIsLeftArm) ? (-1.f) : (1.f);
 
-    const float Beta = UUBIK::CosineRule(Settings.UpperArmLength, UpperArmToHandLen, Settings.LowerArmLength) * Sign;
-    //UE_LOG(LogUBIKRuntime, Display, TEXT("Beta: %f"), Beta);
+    const float Beta = USIK::CosineRule(Settings.UpperArmLength, UpperArmToHandLen, Settings.LowerArmLength) * Sign;
+    //UE_LOG(LogSIKRuntime, Display, TEXT("Beta: %f"), Beta);
 
-    float Omega = UUBIK::CosineRule(Settings.LowerArmLength, Settings.UpperArmLength, UpperArmToHandLen);
+    float Omega = USIK::CosineRule(Settings.LowerArmLength, Settings.UpperArmLength, UpperArmToHandLen);
     Omega = (bIsLeftArm) ? (180.f - Omega) : (180.f + Omega);
-    //UE_LOG(LogUBIKRuntime, Display, TEXT("Omega: %f"), Omega);
+    //UE_LOG(LogSIKRuntime, Display, TEXT("Omega: %f"), Omega);
 
     const FRotator A = FQuat::FindBetweenNormals(FVector::ForwardVector, (Hand - UpperArm).GetSafeNormal()).Rotator();
-    //UE_LOG(LogUBIKRuntime, Display, TEXT("FindBetweenNormals: %s"), *A.ToString());
+    //UE_LOG(LogSIKRuntime, Display, TEXT("FindBetweenNormals: %s"), *A.ToString());
     const FRotator B = FQuat(UKismetMathLibrary::GetUpVector(A), FMath::DegreesToRadians(Beta)).Rotator();
-    //UE_LOG(LogUBIKRuntime, Display, TEXT("AxisAngleRot: %s"), *B.ToString());
+    //UE_LOG(LogSIKRuntime, Display, TEXT("AxisAngleRot: %s"), *B.ToString());
 
     UpperArmTransform = FTransform((UKismetMathLibrary::ComposeRotators(A, B)), UpperArm, FVector::OneVector);
-    //UE_LOG(LogUBIKRuntime, Display, TEXT("UpperArmTransform: %s"), *UpperArmTransform.ToString());
+    //UE_LOG(LogSIKRuntime, Display, TEXT("UpperArmTransform: %s"), *UpperArmTransform.ToString());
 
     const FTransform TempLowerArm = FTransform(FRotator(0.f, Omega, 0.f), FVector::ForwardVector * Settings.UpperArmLength,
                                                FVector::OneVector);
     LowerArmTransform = TempLowerArm * UpperArmTransform;
-    //UE_LOG(LogUBIKRuntime, Display, TEXT("LowerArmTransform: %s"), *LowerArmTransform.ToString());
+    //UE_LOG(LogSIKRuntime, Display, TEXT("LowerArmTransform: %s"), *LowerArmTransform.ToString());
 }
 
-float FAnimNode_UBIKSolver::RotateElbowByHandPosition(const FVector& Hand, bool bIsLeftArm)
+float FAnimNode_SIKSolver::RotateElbowByHandPosition(const FVector& Hand, bool bIsLeftArm)
 {
     const FVector TempHand = Hand / Settings.ArmLength;
 
@@ -613,21 +613,21 @@ float FAnimNode_UBIKSolver::RotateElbowByHandPosition(const FVector& Hand, bool 
     return Angle;
 }
 
-float FAnimNode_UBIKSolver::RotateElbowByHandRotation(const FTransform& LowerArm, FRotator Hand)
+float FAnimNode_SIKSolver::RotateElbowByHandRotation(const FTransform& LowerArm, FRotator Hand)
 {
     const FRotator LowerArmRot = LowerArm.Rotator();
 
     const FVector LowerArmRight = UKismetMathLibrary::GetRightVector(LowerArmRot);
-    //UE_LOG(LogUBIKRuntime, Display, TEXT("GetRightVector:: %s"), *LowerArmRight.ToString());
+    //UE_LOG(LogSIKRuntime, Display, TEXT("GetRightVector:: %s"), *LowerArmRight.ToString());
 
     const FVector ProjectedForward = UKismetMathLibrary::ProjectVectorOnToPlane(
         UKismetMathLibrary::GetForwardVector(Hand), LowerArmRight
     ).GetSafeNormal();
-    //UE_LOG(LogUBIKRuntime, Display, TEXT("ProjectedForward:: %s"), *ProjectedForward.ToString());
+    //UE_LOG(LogSIKRuntime, Display, TEXT("ProjectedForward:: %s"), *ProjectedForward.ToString());
 
     const FVector LowerArmForward = UKismetMathLibrary::GetForwardVector(LowerArmRot);
 
-    float TempAngle = UUBIK::CosineRule(1.f, 1.f, (ProjectedForward - LowerArmForward).Size());
+    float TempAngle = USIK::CosineRule(1.f, 1.f, (ProjectedForward - LowerArmForward).Size());
 
     const float Sign = (FVector::DotProduct(FVector::CrossProduct(ProjectedForward, LowerArmForward), LowerArmRight) < 0.f)
                            ? (1.f)
@@ -638,7 +638,7 @@ float FAnimNode_UBIKSolver::RotateElbowByHandRotation(const FTransform& LowerArm
     return TempAngle;
 }
 
-void FAnimNode_UBIKSolver::RotateElbow(float Angle, const FTransform& UpperArm, const FTransform& LowerArm, const FVector& HandLoc,
+void FAnimNode_SIKSolver::RotateElbow(float Angle, const FTransform& UpperArm, const FTransform& LowerArm, const FVector& HandLoc,
                                        bool bIsLeftArm, FTransform& NewUpperArm, FTransform& NewLowerArm)
 {
     const FVector PivotLoc =
@@ -654,17 +654,17 @@ void FAnimNode_UBIKSolver::RotateElbow(float Angle, const FTransform& UpperArm, 
 
     const float Roll = (bIsLeftArm) ? (180.f - Angle) : (180.f + Angle);
     const FRotator Delta = FRotator(0.f, 0.f, Roll);
-    // UE_LOG(LogUBIKRuntime, Display, TEXT("!!! Delta: %s"), *Delta.ToString());
+    // UE_LOG(LogSIKRuntime, Display, TEXT("!!! Delta: %s"), *Delta.ToString());
 
     const FTransform Pivot = FTransform(PivotRot, PivotLoc, FVector::OneVector);
-    // UE_LOG(LogUBIKRuntime, Display, TEXT("!!! Pivot: %s"), *Pivot.ToString()); --> Pivot is correct!
+    // UE_LOG(LogSIKRuntime, Display, TEXT("!!! Pivot: %s"), *Pivot.ToString()); --> Pivot is correct!
 
-    NewUpperArm = UUBIK::RotatePointAroundPivot(UpperArm, Pivot, Delta);
-    NewLowerArm = UUBIK::RotatePointAroundPivot(LowerArm, Pivot, Delta);
-    // UE_LOG(LogUBIKRuntime, Display, TEXT("!!! NewUpperArm: %s - NewLowerArm: %s"), *NewUpperArm.ToString(), *NewLowerArm.ToString());
+    NewUpperArm = USIK::RotatePointAroundPivot(UpperArm, Pivot, Delta);
+    NewLowerArm = USIK::RotatePointAroundPivot(LowerArm, Pivot, Delta);
+    // UE_LOG(LogSIKRuntime, Display, TEXT("!!! NewUpperArm: %s - NewLowerArm: %s"), *NewUpperArm.ToString(), *NewLowerArm.ToString());
 }
 
-FTransform FAnimNode_UBIKSolver::GetBaseCharTransform()
+FTransform FAnimNode_SIKSolver::GetBaseCharTransform()
 {
     // I've already added the X and the Y component in SetShoulder(), that's why i negate these here.
     return FTransform(ShoulderTransformComponentSpace.Rotator(),
@@ -672,7 +672,7 @@ FTransform FAnimNode_UBIKSolver::GetBaseCharTransform()
 }
 
 
-void FAnimNode_UBIKSolver::DrawDebug(FAnimInstanceProxy* AnimInstanceProxy)
+void FAnimNode_SIKSolver::DrawDebug(FAnimInstanceProxy* AnimInstanceProxy)
 {
 #if ENABLE_ANIM_DRAW_DEBUG
     if (bApplyLeftHandTransform)
@@ -709,7 +709,7 @@ void FAnimNode_UBIKSolver::DrawDebug(FAnimInstanceProxy* AnimInstanceProxy)
 #endif
 }
 
-void FAnimNode_UBIKSolver::DebugDrawAxes(FAnimInstanceProxy* AnimInstanceProxy, const FTransform& Transform, bool bDrawAxes,
+void FAnimNode_SIKSolver::DebugDrawAxes(FAnimInstanceProxy* AnimInstanceProxy, const FTransform& Transform, bool bDrawAxes,
                                          FColor SphereColor)
 {
 #if ENABLE_ANIM_DRAW_DEBUG
