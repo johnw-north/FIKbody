@@ -1,6 +1,11 @@
 # Simple IK for VR  (SIK-VR) #
 
-SIK is an Upper Body IK solution for VR inspired by Mathias Parger's master thesis http://diglib.tugraz.at/download.php?id=5c4a48dc5a282&location=browse
+SIK is a Full Body IK solution for VR.
+
+Forked from UBIK Solver by JonasMolgaard.
+https://github.com/JonasMolgaard/UBIKSolver
+
+Inspired by Mathias Parger's master thesis http://diglib.tugraz.at/download.php?id=5c4a48dc5a282&location=browse
 which was implemented in Unity and shared here: https://github.com/dabeschte/VRArmIK
 
 ## Features ##
