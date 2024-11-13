@@ -2,7 +2,7 @@
 
 SIK is a Full Body IK solution for VR.
 
-Forked from UBIK Solver by JonasMolgaard.
+Forked from UBIK Solver by Jonas Molgaard.
 https://github.com/JonasMolgaard/UBIKSolver
 
 Inspired by Mathias Parger's master thesis http://diglib.tugraz.at/download.php?id=5c4a48dc5a282&location=browse
