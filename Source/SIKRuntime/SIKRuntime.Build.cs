@@ -24,7 +24,7 @@ public class SIKRuntime : ModuleRules
 
         PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "AnimGraphRuntime", "AnimationCore" });
 
-        PrivateDependencyModuleNames.AddRange(new string[] { "Slate", "SlateCore", "Projects", "XRBase", "HeadMountedDisplay" });
+        PrivateDependencyModuleNames.AddRange(new string[] { "Slate", "SlateCore", "Projects", "HeadMountedDisplay" });
 
         DynamicallyLoadedModuleNames.AddRange(
 			new string[]
